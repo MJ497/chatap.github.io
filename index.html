@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Laila:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="import" href="data.js">
+<!-- boxicons -->
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>ChatAP</title>
+</head>
+<body>
+    <div class="chatbox">
+        <div class ="logo">
+           <p>ChatAP<i class='bx bxs-chat'></i> </p> 
+          
+           <div class="toggle"> <div class="moon-sun">
+            <i class="bx bx-moon moon"></i>
+            <i class="bx bx-sun sun"></i>
+           
+        </div>
+            <span class="switch"></span>
+           </div>
+        </div>
+<ul id ="chats">  
+
+</ul>
+        <div class="bar">
+        <form onsubmit="return sendMessage()">
+            <input id="message" placeholder="Enter messages  here" class="msg">
+    
+ <button type="submit" class="btn" ><i class='bx bxs-send bx-flip-vertical' ></i></button>
+</div>
+    </div>
+    
+</body>
+<!-- username prompt -->
+<script>
+var name = prompt('Enter userName');
+var userColor = getUsernameColor(name);
+
+function sendMessage(){
+    var message = document.getElementById('message').value;
+
+    var chat ={sender:name,
+    message:message,
+    color:userColor
+};
+
+ // Get existing chats from localStorage or initialize an empty array
+ var chats = JSON.parse(localStorage.getItem('chats')) || [];
+
+
+    // Add the new chat to the array
+    chats.push(chat);
+   
+     // Store the updated chats back in localStorage
+     localStorage.setItem('chats', JSON.stringify(chats));
+
+// Display the updated chats
+displayChats();
+
+// Clear the input field
+document.getElementById('message').value = '';
+ 
+  // Prevent the default form submission
+  event.preventDefault();
+}
+function displayChats() {
+            var chats = JSON.parse(localStorage.getItem('chats')) || [];
+            var chatsContainer = document.getElementById('chats');
+            chatsContainer.innerHTML = ''; // Clear previous messages
+
+            chats.forEach(function (chat) {
+                var html = '<li class="chat-message" style="background:#000;color:white; '+ chat.color + ';">' + chat.sender + ': ' + chat.message + '</li>';
+                
+                chatsContainer.innerHTML += html;
+            });
+             // Scroll to the bottom of the chat container
+    chatsContainer.scrollTop = chatsContainer.scrollHeight;
+        }
+
+        // Initial display of chats
+        displayChats();
+
+// functio(snapshot){
+// var html = "";
+// html += "<li>";
+// html += snapshot.val().sender + ": " + snapshot.val().message;
+//     html += "</li>";
+
+//     document.getElementById('chats').innerHTML += html;
+// });
+
+</script>
+
+<!-- light mode -->
+<script>
+const body = document.querySelector("body"),
+ toggle = body.querySelector(".toggle"),
+ mswitch = body.querySelector(".switch") ;
+
+ mswitch.addEventListener("click", () => {
+ body.classList.toggle("light");
+ });
+</script>
+</html>
