@@ -42,7 +42,8 @@
 <script>
 var name = prompt('Enter userName');
 var userColor = getUsernameColor(name);
-
+// Connect to the WebSocket server
+var socket = new WebSocket('ws://mj497.github.io/chatap.github.io/');
 function sendMessage(){
     var message = document.getElementById('message').value;
 
@@ -50,7 +51,8 @@ function sendMessage(){
     message:message,
     color:userColor
 };
-
+socket.send(JSON.stringify(chat));
+    document.getElementById('message').value = '';
  // Get existing chats from localStorage or initialize an empty array
  var chats = JSON.parse(localStorage.getItem('chats')) || [];
 
