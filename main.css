@@ -1,7 +1,7 @@
 :root{
     --bg:#3d3737;
     --txt:#fff;
-    
+    --txc:#000;
 }
 *{
     box-sizing: border-box;
@@ -23,8 +23,9 @@ background:var(--bg);
 }
 
 body.light{
-    --bg:#eae3e3;
+    --bg:#d1c4c4;
     --txt:#000;
+    --txc:#fff;
 }
 .chatbox{
 height: 90%;
@@ -58,12 +59,13 @@ border-radius: 32px;
     font-weight:700;
     color:var(--txt);
 }
-ul{
+.wes{
     height:80%;
     width: 100%;
     overflow-y: scroll;
+    padding: 3px;
 }
-form{
+.form{
     height: 100%;
     width: 100%;
     display: flex;
@@ -71,7 +73,7 @@ form{
     justify-content: space-between;
     
 }
-button{
+.btn{
     height: 46px;
     width: 50px;
     color:var(--txt);
@@ -81,7 +83,7 @@ button{
     font-size: 37px;
     text-align: center;
 }
-button i{
+.btn i{
     rotate:-30deg;
 padding-top: 6px;
 }
@@ -91,8 +93,12 @@ padding-top: 6px;
     border-radius: 32px;
     float: left;
     margin-left: 18px;
-    padding-left: 10px;
+    padding-left: 15px;
+    padding-top: 7px;
+    text-align:start;
+    
 }
+
 .moon-sun{
     height: 50px;
     width: 60px;
@@ -149,18 +155,36 @@ body.light .toggle .moon-sun .moon{
     opacity: 0;
 }
 ul li{
-    height: auto;
     width: 60%;
     background: var(--txt);
     color: var(--bg);
-    border-radius: 32px;
-    margin-top: 12px;
-    margin-left: 3px;
-    padding: 10px;
+    border-radius: 18px;
+
+display: flex;
+    padding:2px ;
     
+    display: flex;
+    margin-top: 5px;
 }
-.chat-message {
-    float: right; /* Display messages from the right */
-    padding: 10px;
-    margin-right: 3px;
+/* #outer{
+    background: #fff;
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+} */
+ .inner{
+float: right; 
 }
+    #dltMsg{
+        color: var(--bg);
+        margin-left: 20px;
+    }.other{
+        background: var(--txc);
+        color: var(--txt);
+    }
+
+    
+
+/* .me{
+    background: #000; 
+} */
