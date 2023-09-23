@@ -26,73 +26,99 @@
             <span class="switch"></span>
            </div>
         </div>
-<ul id ="chats">  
+<ul id ="messages" class="wes">  
 
 </ul>
         <div class="bar">
-        <form onsubmit="return sendMessage()">
-            <input id="message" placeholder="Enter messages  here" class="msg">
-    
- <button type="submit" class="btn" ><i class='bx bxs-send bx-flip-vertical' ></i></button>
-        </form>
+        <div id="sendMsg" class="form">
+          
+            <textarea id="msgTxt" rows="4" cols="50" placeholder="Enter messages  here" class="msg" autocomplete="off"></textarea>
+
+ <button type="submit" class="btn" id="msgBtn" onclick="module.sendMsg()"><i class='bx bxs-send bx-flip-vertical' ></i></button>
+ </form>
 </div>
     </div>
     
 </body>
-<!-- username prompt -->
 <script>
-var name = prompt('Enter userName');
-var userColor = getUsernameColor(name);
-// Connect to the WebSocket server
-//var socket = new WebSocket('localhost:8080');
-function sendMessage(){
-    var message = document.getElementById('message').value;
-
-    var chat ={sender:name,
-    message:message,
-    color:userColor
-};
-//socket.send(JSON.stringify(chat));
-   // document.getElementById('message').value = '';
- // Get existing chats from localStorage or initialize an empty array
- var chats = JSON.parse(localStorage.getItem('chats')) || [];
-
-
-    // Add the new chat to the array
-    chats.push(chat);
-   
-     // Store the updated chats back in localStorage
-     localStorage.setItem('chats', JSON.stringify(chats));
-
-// Display the updated chats
-displayChats();
-
-// Clear the input field
-document.getElementById('message').value = '';
- 
-  // Prevent the default form submission
-  event.preventDefault();
-}
-function displayChats() {
-            var chats = JSON.parse(localStorage.getItem('chats')) || [];
-            var chatsContainer = document.getElementById('chats');
-            chatsContainer.innerHTML = ''; // Clear previous messages
-
-            chats.forEach(function (chat) {
-                var html = '<li class="chat-message" style="background:#000;color:white; '+ chat.color + ';">' + chat.sender + ': ' + chat.message + '</li>';
-                
-                chatsContainer.innerHTML += html;
-            });
-             // Scroll to the bottom of the chat container
-    chatsContainer.scrollTop = chatsContainer.scrollHeight;
-        }
-
-        // Initial display of chats
-        displayChats();
-
-
-
+    module ={};
 </script>
+<script type = "module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+  import {getDatabase, ref, set ,onChildAdded, onChildRemoved} from "https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js";
+  
+  
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+  apiKey: "AIzaSyCYc2Phs48fwQtmwnlL8QN8HofQ1mD5fTU",
+  authDomain: "chatcode-1a581.firebaseapp.com",
+  databaseURL: "https://chatcode-1a581-default-rtdb.firebaseio.com",
+  projectId: "chatcode-1a581",
+  storageBucket: "chatcode-1a581.appspot.com",
+  messagingSenderId: "1097191500277",
+  appId: "1:1097191500277:web:b6095d3a651210e43718bc"
+};
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  //viarables
+  var msgTxt = document.getElementById('msgTxt');
+  var sender;
+
+  if(sessionStorage.getItem('sender')){
+    sender = sessionStorage.getItem('sender');
+  }else{
+    sender = prompt('Enter UserName');
+    sessionStorage.setItem('sender',sender);
+
+     // Display an alert when a new user enters the chat
+  alert(' ' + sender + '! has joind the chat');
+  }
+
+  //to send message
+
+  module.sendMsg = function sendMsg(){
+    var msg = msgTxt.value;
+    var timestamp = new Date().getTime();
+    set(ref(db,"messages/"+timestamp),{
+        msg :msg,
+        sender : sender
+        
+    })
+    .then(() => {
+      // Clear the input field after successfully sending the message
+      msgTxt.value = "";
+    })
+  };
+    // recieve message
+    onChildAdded(ref(db,"messages"),(Data) =>{
+      if (Data.val().sender == sender){
+     messages.innerHTML += "<li class=inner id='"+Data.key+"'>you:<br>"+Data.val().msg+"<br><button style=background:none  id=dltMsg onclick=module.dltMsg("+Data.key+")><i class='bx bxs-x-circle'></i></button></li>"
+      }else{
+         messages.innerHTML += "<li style=float:left class=other id="+Data.key+">"+Data.val().sender+":<br>"+Data.val().msg+"</li>"
+      
+      }
+  })
+
+  //delete
+  module.dltMsg = function dltMSg(key){
+    set(ref(db,"messages/"+key),null);
+  }
+
+  //when messages are deleted
+  onChildRemoved(ref(db,'messages'),(Data)=>{
+var msgBox = document.getElementById(Data.key);
+if (msgBox) {
+    messages.removeChild(msgBox); // Remove the message element from the UI
+  }  })
+  
+</script>
+
+
+
 
 <!-- light mode -->
 <script>
